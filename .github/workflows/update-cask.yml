@@ -1,0 +1,53 @@
+name: Update cask
+
+on:
+  repository_dispatch:
+    types: [update-cask]
+  workflow_dispatch:
+    inputs:
+      cask:
+        description: Cask to update
+        required: true
+        type: choice
+        options: [gh-inbox, jira-sprint]
+      version:
+        description: Semantic version without the leading v
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-cask
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: macos-15
+    env:
+      CASK: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.cask || github.event.client_payload.cask }}
+      VERSION: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version || github.event.client_payload.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download release and update cask
+        run: ./scripts/update-cask.sh "$CASK" "$VERSION"
+      - name: Link and trust this tap
+        run: |
+          TAP="$(brew --repository)/Library/Taps/abelfubu/homebrew-tap"
+          mkdir -p "$(dirname "$TAP")"
+          ln -s "$GITHUB_WORKSPACE" "$TAP"
+          brew trust abelfubu/tap
+      - run: brew audit --cask --online --strict "abelfubu/tap/$CASK"
+      - run: brew style "Casks/$CASK.rb"
+      - name: Commit and publish cask
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Casks/$CASK.rb"
+          if git diff --cached --quiet; then
+            echo "$CASK is already at $VERSION"
+            exit 0
+          fi
+          git commit -m "Update $CASK to $VERSION"
+          git push

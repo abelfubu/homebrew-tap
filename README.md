@@ -30,11 +30,13 @@ Both apps require macOS 14 or newer and include Apple Silicon and Intel binaries
 
 ## Update a cask
 
-After publishing the corresponding GitHub release:
+Tagged app releases automatically send an `update-cask` repository dispatch. The `update-cask.yml` workflow downloads the release asset, updates the cask version and SHA-256, runs Homebrew audit/style checks, and commits and pushes the result.
+
+To update manually after publishing a GitHub release:
 
 ```sh
 ./scripts/update-cask.sh gh-inbox 0.1.0
 ./scripts/update-cask.sh jira-sprint 0.1.0
 ```
 
-The script downloads the release asset, updates the cask version and SHA-256, and runs Ruby syntax checks. Review and commit the resulting cask changes.
+You can also run **Update cask** through GitHub's manual workflow dispatch with a cask name and semantic version.
