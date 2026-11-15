@@ -38,7 +38,10 @@ jobs:
           mkdir -p "$(dirname "$TAP")"
           ln -s "$GITHUB_WORKSPACE" "$TAP"
           brew trust abelfubu/tap
-      - run: brew audit --cask --online --strict "abelfubu/tap/$CASK"
+      - name: Audit cask
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
+        run: brew audit --cask --online --strict "abelfubu/tap/$CASK"
       - run: brew style "Casks/$CASK.rb"
       - name: Commit and publish cask
         run: |
