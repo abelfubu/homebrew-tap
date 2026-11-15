@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Link and trust this tap
+        run: |
+          TAP="$(brew --repository)/Library/Taps/abelfubu/homebrew-tap"
+          mkdir -p "$(dirname "$TAP")"
+          ln -s "$GITHUB_WORKSPACE" "$TAP"
+          brew trust abelfubu/tap
+      - run: ruby -c Casks/gh-inbox.rb
+      - run: ruby -c Casks/jira-sprint.rb
+      - run: brew audit --cask --online --strict abelfubu/tap/gh-inbox
+      - run: brew audit --cask --online --strict abelfubu/tap/jira-sprint
+      - run: brew style Casks/gh-inbox.rb Casks/jira-sprint.rb
