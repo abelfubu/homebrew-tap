@@ -7,6 +7,11 @@ cask "jira-sprint" do
   desc "Keyboard-driven native Jira sprint inbox"
   homepage "https://github.com/abelfubu/jira-sprint"
 
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
+
   depends_on formula: "acli"
   depends_on macos: :sonoma
 

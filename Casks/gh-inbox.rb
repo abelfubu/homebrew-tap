@@ -7,6 +7,11 @@ cask "gh-inbox" do
   desc "Keyboard-driven native GitHub pull-request inbox"
   homepage "https://github.com/abelfubu/gh-inbox"
 
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
+
   depends_on formula: "gh"
   depends_on macos: :sonoma
 
