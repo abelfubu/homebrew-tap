@@ -1,6 +1,6 @@
 cask "jira-sprint" do
-  version "0.2.1"
-  sha256 "4eb8a9d0362524127db50ec3eae1c174ecec306d596b3f266a66104baa4a0e35"
+  version "0.2.2"
+  sha256 "ad565aa88579745aa9977b5d351bb1a45babab23b1ed09243dcd7438c978b44d"
 
   url "https://github.com/abelfubu/jira-sprint/releases/download/v#{version}/Jira-Sprint-#{version}.zip"
   name "Jira Sprint"
