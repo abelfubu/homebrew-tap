@@ -1,6 +1,6 @@
 cask "gh-inbox" do
-  version "0.2.2"
-  sha256 "a8e369e0b50efad0ae9f277193ac2f7db7d1d2c41b4858bfd664cbf8c72b73f4"
+  version "0.2.3"
+  sha256 "7595aae1bc7d8ad2520b89472d3a1936c012d3ca94cf1f34073c7377b48e065f"
 
   url "https://github.com/abelfubu/gh-inbox/releases/download/v#{version}/GitHub-Inbox-#{version}.zip"
   name "GitHub Inbox"
